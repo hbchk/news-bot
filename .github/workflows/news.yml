@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 */5 * * *'  # Раз в 5 часов
+    - cron: '0 */5 * * *'  # Запуск каждые 5 часов
 
 jobs:
   send_news:
@@ -15,13 +15,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debug files  # 🔍 Проверяем файлы
+      - name: Debug files
         run: ls -R
 
-      - name: Check working directory  # 📌 Проверяем текущую папку
+      - name: Check working directory
         run: pwd
 
-      - name: Set permissions for send_news.py  # 🛠️ Даем права на запуск
+      - name: Set permissions
         run: chmod +x send_news.py
 
       - name: Install dependencies
