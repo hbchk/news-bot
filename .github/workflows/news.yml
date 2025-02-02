@@ -16,20 +16,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Debug files
-        run: ls -R
-
-      - name: Check working directory
-        run: pwd
+        run: ls -R && pwd
 
       - name: Set permissions
         run: chmod +x send_news.py
 
-      - name: Install Python and Pip
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install --upgrade pip
-          pip3 install -r requirements.txt
+      - name: Install dependencies
+        run: pip install openai
 
       - name: Run script
-        run: python3 send_news.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        run: python send_news.py
