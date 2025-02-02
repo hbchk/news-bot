@@ -16,10 +16,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Debug files
-        run: ls -R
-
-      - name: Check working directory
-        run: echo "Current directory: $(pwd)"
+        run: |
+          ls -R
+          echo "Current directory: $(pwd)"
 
       - name: Set permissions
         run: chmod +x send_news.py
@@ -31,7 +30,11 @@ jobs:
           python -m pip install -r requirements.txt
 
       - name: Verify send_news.py exists
-        run: if [ ! -f send_news.py ]; then echo "Error: send_news.py not found!"; exit 1; fi
+        run: |
+          if [ ! -f send_news.py ]; then 
+            echo "Error: send_news.py not found!" 
+            exit 1 
+          fi
 
       - name: Run script
         run: python send_news.py
