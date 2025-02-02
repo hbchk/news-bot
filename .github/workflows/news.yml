@@ -19,13 +19,23 @@ jobs:
         run: ls -R
 
       - name: Check working directory
-        run: pwd
+        run: echo "Current directory: $(pwd)"
 
       - name: Set permissions
         run: chmod +x send_news.py
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Install Python dependencies
+        run: |
+          python -m ensurepip --default-pip
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Verify send_news.py exists
+        run: |
+          if [ ! -f send_news.py ]; then
+            echo "Error: send_news.py not found!"
+            exit 1
+          fi
 
       - name: Run script
         run: python send_news.py
