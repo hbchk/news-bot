@@ -1,27 +1,31 @@
-name: News Bot
+name: Send News
+
 on:
+  push:
+    branches:
+      - main
   schedule:
-    - cron: '0 */5 * * *'  # Запуск каждые 5 часов
-  workflow_dispatch:  # Возможность запустить вручную
+    - cron: '0 */5 * * *'  # Раз в 5 часов
 
 jobs:
   send_news:
-    runs-on: ubuntu-latest  # <-- ВАЖНО: Должно быть указано
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-      
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.9'
-      
+        uses: actions/checkout@v4
+
+      - name: Debug files  # 🔍 Проверяем файлы
+        run: ls -R
+
+      - name: Check working directory  # 📌 Проверяем текущую папку
+        run: pwd
+
+      - name: Set permissions for send_news.py  # 🛠️ Даем права на запуск
+        run: chmod +x send_news.py
+
       - name: Install dependencies
-        run: |
-          pip install openai schedule requests
-      
+        run: pip install -r requirements.txt
+
       - name: Run script
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         run: python send_news.py
