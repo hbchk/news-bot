@@ -7,16 +7,21 @@ import os
 # Настройки Gmail SMTP
 smtp_server = "smtp.gmail.com"
 smtp_port = 587
-sender_email = "erichbchk@gmail.com"
-app_password = os.getenv("SMTP_PASSWORD")  # Берем пароль из переменных окружения!
+sender_email = os.getenv("EMAIL")  # Теперь берём из окружения
+app_password = os.getenv("SMTP_PASSWORD")
 
 # OpenAI API Key
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Берем ключ API из переменных окружения!
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Данные получателя
-receiver_email = "habibulline3@gmail.com"
+receiver_email = os.getenv("RECEIVER_EMAIL")
 
-# Функция генерации пяти важных новостей мира через OpenAI
+# Проверяем, что все переменные заданы
+if not sender_email or not app_password or not receiver_email or not openai.api_key:
+    print("❌ Ошибка: Не заданы все необходимые переменные окружения!")
+    exit(1)
+
+# Функция генерации новостей
 def generate_world_news():
     print("📡 Генерация новостей...")
     try:
@@ -30,7 +35,7 @@ def generate_world_news():
                     "Новостей должно быть ровно 5."
                 )
             }],
-            timeout=10  # Таймаут 10 секунд
+            timeout=10
         )
         news = response["choices"][0]["message"]["content"]
         print("✅ Новости успешно сгенерированы!")
@@ -39,9 +44,9 @@ def generate_world_news():
         print(f"❌ Ошибка генерации новостей: {e}")
         return f"Ошибка генерации новостей: {e}"
 
-# Функция отправки письма с новостями
+# Функция отправки письма
 def send_email():
-    print("📨 Отправка письма...")
+    print(f"📨 Отправка письма от {sender_email} к {receiver_email}...")
     subject = "Самые важные новости мира 🌍"
     body = generate_world_news()
 
@@ -52,18 +57,18 @@ def send_email():
     message.attach(MIMEText(body, "plain"))
 
     try:
-        server = smtplib.SMTP(smtp_server, smtp_port, timeout=10)  # Таймаут на SMTP соединение
+        server = smtplib.SMTP(smtp_server, smtp_port, timeout=10)
         server.starttls()
         server.login(sender_email, app_password)
         server.sendmail(sender_email, receiver_email, message.as_string())
-        print("✅ Новости отправлены:\n", body)
+        print("✅ Новости успешно отправлены!")
     except Exception as e:
         print(f"❌ Ошибка при отправке: {e}")
     finally:
         server.quit()
 
-# Запуск скрипта (ОДИН раз!)
+# Запуск скрипта
 if __name__ == "__main__":
-    print("🚀 Старт send_news.py")
+    print("🚀 Запуск send_news.py")
     send_email()
     print("🏁 Скрипт завершён!")
