@@ -18,8 +18,24 @@ jobs:
       - name: Debug files
         run: ls -R && pwd
 
+      - name: Install pip
+        run: sudo apt update && sudo apt install -y python3-pip
+
       - name: Install dependencies
         run: pip install openai
+
+      - name: Debug environment variables
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
+        run: |
+          echo "DEBUG: Проверка переменных окружения (значения скрыты):"
+          if [ -z "$EMAIL" ]; then echo "EMAIL: NOT SET"; else echo "EMAIL: SET"; fi
+          if [ -z "$SMTP_PASSWORD" ]; then echo "SMTP_PASSWORD: NOT SET"; else echo "SMTP_PASSWORD: SET"; fi
+          if [ -z "$OPENAI_API_KEY" ]; then echo "OPENAI_API_KEY: NOT SET"; else echo "OPENAI_API_KEY: SET"; fi
+          if [ -z "$RECEIVER_EMAIL" ]; then echo "RECEIVER_EMAIL: NOT SET"; else echo "RECEIVER_EMAIL: SET"; fi
 
       - name: Run script
         env:
