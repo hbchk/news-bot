@@ -7,14 +7,14 @@ import os
 # Настройки Gmail SMTP
 smtp_server = "smtp.gmail.com"
 smtp_port = 587
-sender_email = os.getenv("EMAIL")  # Теперь берём из окружения
-app_password = os.getenv("SMTP_PASSWORD")
+sender_email = os.getenv("EMAIL")         # Из GitHub Secrets: EMAIL = erichbchk@gmail.com
+app_password = os.getenv("SMTP_PASSWORD")   # Из GitHub Secrets: SMTP_PASSWORD = mqea aabg dgtl ankb
 
 # OpenAI API Key
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Из GitHub Secrets: OPENAI_API_KEY = sk-proj-...
 
 # Данные получателя
-receiver_email = os.getenv("RECEIVER_EMAIL")
+receiver_email = os.getenv("RECEIVER_EMAIL")  # Из GitHub Secrets: RECEIVER_EMAIL = habibulline3@gmail.com
 
 # Проверяем, что все переменные заданы
 if not sender_email or not app_password or not receiver_email or not openai.api_key:
@@ -35,7 +35,7 @@ def generate_world_news():
                     "Новостей должно быть ровно 5."
                 )
             }],
-            timeout=10
+            timeout=10  # Таймаут 10 секунд
         )
         news = response["choices"][0]["message"]["content"]
         print("✅ Новости успешно сгенерированы!")
