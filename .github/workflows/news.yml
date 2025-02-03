@@ -18,14 +18,13 @@ jobs:
       - name: Debug files
         run: ls -R && pwd
 
-      - name: Set permissions
-        run: chmod +x send_news.py
-
       - name: Install dependencies
         run: pip install openai
 
       - name: Run script
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          EMAIL: ${{ secrets.EMAIL }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RECEIVER_EMAIL: ${{ secrets.RECEIVER_EMAIL }}
         run: python send_news.py
